@@ -1,0 +1,533 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+.app{font-family:'Inter',sans-serif;background:#080D1A;min-height:100vh;color:#E8EDF5;}
+.header{background:#080D1A;border-bottom:1px solid rgba(0,212,255,0.15);padding:1rem 1.5rem;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:10;}
+.logo-icon{width:36px;height:36px;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.35);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.logo-text{font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:700;color:#E8EDF5;letter-spacing:-0.3px;}
+.logo-text span{color:#00D4FF;}
+.badge-live{margin-left:auto;font-size:11px;font-weight:500;color:#00E676;background:rgba(0,230,118,0.1);border:1px solid rgba(0,230,118,0.3);border-radius:20px;padding:3px 10px;letter-spacing:0.5px;}
+.main{max-width:780px;margin:0 auto;padding:2rem 1.5rem 3rem;}
+.hero{text-align:center;margin-bottom:2rem;}
+.hero-label{font-size:11px;font-weight:500;letter-spacing:2px;color:#00D4FF;text-transform:uppercase;margin-bottom:0.6rem;}
+.hero-title{font-family:'Space Grotesk',sans-serif;font-size:30px;font-weight:700;color:#E8EDF5;line-height:1.2;margin-bottom:0.6rem;letter-spacing:-0.5px;}
+.hero-sub{font-size:14px;color:#5A6A8A;max-width:500px;margin:0 auto;line-height:1.6;}
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:1.75rem;}
+.stat-box{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:0.9rem;text-align:center;}
+.stat-num{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:700;color:#00D4FF;margin-bottom:2px;}
+.stat-desc{font-size:10px;color:#3A4A6A;text-transform:uppercase;letter-spacing:0.5px;}
+.input-card{background:#0D1425;border:1px solid rgba(0,212,255,0.18);border-radius:16px;padding:1.5rem;margin-bottom:1.25rem;}
+.input-label{font-size:11px;font-weight:500;color:#00D4FF;letter-spacing:1px;text-transform:uppercase;margin-bottom:0.75rem;display:flex;align-items:center;gap:6px;}
+.news-textarea{width:100%;min-height:140px;background:#060B16;border:1px solid rgba(255,255,255,0.07);border-radius:10px;color:#D0D8EC;font-family:'Inter',sans-serif;font-size:14px;line-height:1.7;padding:1rem 1.25rem;resize:vertical;outline:none;transition:border-color 0.2s;}
+.news-textarea:focus{border-color:rgba(0,212,255,0.35);}
+.news-textarea::placeholder{color:#2A3A5A;}
+.examples-strip{display:flex;gap:6px;flex-wrap:wrap;margin-top:0.6rem;}
+.example-chip{font-size:11px;color:#4A5A7A;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:20px;padding:3px 10px;cursor:pointer;transition:all 0.2s;}
+.example-chip:hover{color:#00D4FF;border-color:rgba(0,212,255,0.3);background:rgba(0,212,255,0.05);}
+.input-footer{display:flex;align-items:center;justify-content:space-between;margin-top:0.9rem;flex-wrap:wrap;gap:0.6rem;}
+.char-count{font-size:12px;color:#2A3A5A;}
+.btn-analyze{background:#00D4FF;color:#080D1A;border:none;border-radius:10px;padding:0.65rem 1.5rem;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:7px;transition:all 0.2s;}
+.btn-analyze:hover:not(:disabled){background:#00BCDF;transform:translateY(-1px);}
+.btn-analyze:disabled{opacity:0.4;cursor:not-allowed;transform:none;}
+.result-wrap{display:none;}
+.result-wrap.active{display:block;}
+.result-card{background:#0D1425;border-radius:16px;overflow:hidden;margin-bottom:1rem;}
+.result-header{padding:1.25rem 1.5rem;display:flex;align-items:center;gap:1rem;border-bottom:1px solid rgba(255,255,255,0.06);}
+.verdict-badge{display:flex;align-items:center;gap:7px;padding:0.45rem 1rem;border-radius:8px;font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;flex-shrink:0;}
+.v-hoaks{background:rgba(255,59,92,0.15);border:1px solid rgba(255,59,92,0.4);color:#FF5C7A;}
+.v-valid{background:rgba(0,230,118,0.1);border:1px solid rgba(0,230,118,0.3);color:#00E676;}
+.v-ragu{background:rgba(255,184,0,0.1);border:1px solid rgba(255,184,0,0.3);color:#FFB800;}
+.result-title-col{flex:1;}
+.rv-label{font-size:11px;color:#3A4A6A;margin-bottom:2px;}
+.rv-text{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:600;color:#D0D8EC;line-height:1.4;}
+.meter-section{padding:1rem 1.5rem;border-bottom:1px solid rgba(255,255,255,0.06);}
+.meter-top{display:flex;justify-content:space-between;margin-bottom:6px;font-size:12px;}
+.meter-top span:first-child{color:#4A5A7A;}
+.meter-top strong{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:600;}
+.bar-track{height:10px;background:rgba(255,255,255,0.05);border-radius:5px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:5px;width:0%;transition:width 1.2s cubic-bezier(0.4,0,0.2,1);}
+.fill-d{background:#FF3B5C;}
+.fill-w{background:#FFB800;}
+.fill-s{background:#00C85A;}
+.bar-legend{display:flex;justify-content:space-between;font-size:10px;color:#2A3A5A;margin-top:4px;}
+.inds-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:1rem 1.5rem;border-bottom:1px solid rgba(255,255,255,0.06);}
+.ind-box{background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.05);border-radius:8px;padding:0.7rem;text-align:center;}
+.ind-ico{font-size:18px;margin-bottom:3px;}
+.ind-val{font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;margin-bottom:2px;}
+.ind-lbl{font-size:9px;color:#3A4A6A;text-transform:uppercase;letter-spacing:0.5px;}
+.analysis-body{padding:1.25rem 1.5rem;}
+.sec-head{font-size:10px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:#00D4FF;margin-bottom:0.5rem;display:flex;align-items:center;gap:5px;}
+.sec-head i{font-size:13px;}
+.ana-text{font-size:13px;color:#7A8BAA;line-height:1.7;margin-bottom:1.1rem;}
+.flags-list{list-style:none;display:flex;flex-direction:column;gap:5px;margin-bottom:1.1rem;}
+.flag-item{display:flex;align-items:flex-start;gap:7px;font-size:13px;color:#7A8BAA;line-height:1.5;}
+.fdot{width:5px;height:5px;border-radius:50%;flex-shrink:0;margin-top:7px;}
+.dd{background:#FF3B5C;}.dw{background:#FFB800;}.ds{background:#00E676;}.di{background:#00D4FF;}
+.tip-box{background:rgba(0,212,255,0.05);border:1px solid rgba(0,212,255,0.12);border-radius:10px;padding:0.9rem 1rem;display:flex;gap:10px;align-items:flex-start;}
+.tip-box i{color:#00D4FF;font-size:16px;flex-shrink:0;margin-top:2px;}
+.tip-text{font-size:13px;color:#5A6A8A;line-height:1.6;}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1.1rem;}
+.detail-box{background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.05);border-radius:8px;padding:0.75rem;}
+.det-label{font-size:10px;color:#3A4A6A;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;}
+.det-bar-track{height:4px;background:rgba(255,255,255,0.05);border-radius:2px;margin-bottom:4px;}
+.det-bar-fill{height:100%;border-radius:2px;transition:width 1.4s ease;}
+.det-score{font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:700;}
+.btn-reset{background:transparent;border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:0.5rem 1rem;color:#5A6A8A;font-size:13px;cursor:pointer;transition:all 0.2s;margin-top:1rem;width:100%;}
+.btn-reset:hover{border-color:rgba(0,212,255,0.3);color:#00D4FF;}
+</style>
+
+<div class="app">
+<div class="header">
+  <div class="logo-icon"><i class="ti ti-shield-check" style="color:#00D4FF;font-size:18px" aria-hidden="true"></i></div>
+  <span class="logo-text">Fakta<span>Check</span>.ID</span>
+  <span class="badge-live">● OFFLINE AI</span>
+</div>
+
+<div class="main">
+  <div class="hero">
+    <p class="hero-label">Analisis Lokal — Tanpa API</p>
+    <h1 class="hero-title">Deteksi Hoaks Berbasis<br>Algoritma Pola Bahasa</h1>
+    <p class="hero-sub">Sistem analisis lokal menggunakan 12+ indikator linguistik, database kata hoaks, dan heuristik berita Indonesia. Tidak perlu koneksi API.</p>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-box"><div class="stat-num">12+</div><div class="stat-desc">Indikator</div></div>
+    <div class="stat-box"><div class="stat-num">300+</div><div class="stat-desc">Kata Kunci</div></div>
+    <div class="stat-box"><div class="stat-num">100%</div><div class="stat-desc">Lokal & Privat</div></div>
+  </div>
+
+  <div class="input-card">
+    <label class="input-label" for="newsInput">
+      <i class="ti ti-article" aria-hidden="true"></i> Masukkan teks berita atau klaim
+    </label>
+    <textarea class="news-textarea" id="newsInput"
+      placeholder="Tempelkan berita, judul artikel, atau klaim viral di sini...&#10;&#10;Minimal 30 karakter untuk dianalisis."></textarea>
+    <div style="margin-top:0.6rem;">
+      <span style="font-size:10px;color:#2A3A5A;text-transform:uppercase;letter-spacing:1px;font-weight:500;">Contoh cepat:</span>
+      <div class="examples-strip">
+        <span class="example-chip" onclick="fillEx(0)">Hoaks vaksin</span>
+        <span class="example-chip" onclick="fillEx(1)">Hoaks bencana</span>
+        <span class="example-chip" onclick="fillEx(2)">Hoaks kesehatan</span>
+        <span class="example-chip" onclick="fillEx(3)">Berita valid</span>
+        <span class="example-chip" onclick="fillEx(4)">Klaim ambigu</span>
+      </div>
+    </div>
+    <div class="input-footer">
+      <span class="char-count" id="charCount">0 karakter</span>
+      <button class="btn-analyze" id="analyzeBtn" onclick="analyze()" disabled>
+        <i class="ti ti-scan" aria-hidden="true"></i> Analisis
+      </button>
+    </div>
+  </div>
+
+  <div class="result-wrap" id="resultWrap">
+    <div class="result-card" id="resultCard">
+      <div class="result-header">
+        <div class="verdict-badge" id="verdictBadge"></div>
+        <div class="result-title-col">
+          <div class="rv-label">Hasil Analisis Algoritma</div>
+          <div class="rv-text" id="verdictDesc"></div>
+        </div>
+      </div>
+      <div class="meter-section">
+        <div class="meter-top">
+          <span>Skor Kepercayaan Konten</span>
+          <strong id="scoreLabel">—</strong>
+        </div>
+        <div class="bar-track"><div class="bar-fill" id="barFill"></div></div>
+        <div class="bar-legend"><span>Sangat Meragukan</span><span>Netral</span><span>Dapat Dipercaya</span></div>
+      </div>
+      <div class="inds-grid">
+        <div class="ind-box">
+          <div class="ind-ico" id="iLang">—</div>
+          <div class="ind-val" id="iLangV" style="color:#8899BB">—</div>
+          <div class="ind-lbl">Bahasa</div>
+        </div>
+        <div class="ind-box">
+          <div class="ind-ico" id="iSens">—</div>
+          <div class="ind-val" id="iSensV" style="color:#8899BB">—</div>
+          <div class="ind-lbl">Sensasi</div>
+        </div>
+        <div class="ind-box">
+          <div class="ind-ico" id="iClaim">—</div>
+          <div class="ind-val" id="iClaimV" style="color:#8899BB">—</div>
+          <div class="ind-lbl">Klaim</div>
+        </div>
+        <div class="ind-box">
+          <div class="ind-ico" id="iUrgent">—</div>
+          <div class="ind-val" id="iUrgentV" style="color:#8899BB">—</div>
+          <div class="ind-lbl">Urgensi</div>
+        </div>
+      </div>
+      <div class="analysis-body">
+        <div class="sec-head"><i class="ti ti-chart-bar" aria-hidden="true"></i> Skor Per Dimensi</div>
+        <div class="detail-grid" id="detailGrid"></div>
+        <div class="sec-head"><i class="ti ti-flag" aria-hidden="true"></i> Indikator Ditemukan</div>
+        <ul class="flags-list" id="flagsList"></ul>
+        <div class="sec-head"><i class="ti ti-file-text" aria-hidden="true"></i> Analisis Ringkas</div>
+        <p class="ana-text" id="summaryText"></p>
+        <div class="sec-head"><i class="ti ti-bulb" aria-hidden="true"></i> Rekomendasi</div>
+        <div class="tip-box">
+          <i class="ti ti-info-circle" aria-hidden="true"></i>
+          <p class="tip-text" id="recommendText"></p>
+        </div>
+        <button class="btn-reset" onclick="resetForm()">
+          <i class="ti ti-refresh" aria-hidden="true"></i> Analisis Teks Lain
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+const EXAMPLES = [
+  "BREAKING!!! Vaksin COVID-19 sudah TERBUKTI mengandung chip mikro yang bisa melacak lokasi kamu setiap saat! Pemerintah menyembunyikan fakta ini! Sebarkan sebelum dihapus dari internet!!!",
+  "WASPADA!!! Gempa 9.0 SR akan MENGHANTAM Jakarta besok pukul 06.00 WIB! Ilmuwan NASA sudah memperingatkan! Segera evakuasi keluarga ke tempat aman! Jangan tidur malam ini!",
+  "Dokter ini akhirnya BONGKAR rahasia besar! Minum air jahe + kunyit setiap pagi TERBUKTI sembuhkan kanker dalam 3 hari! Ribuan pasien sudah sembuh tapi DISEMBUNYIKAN rumah sakit!",
+  "Badan Pusat Statistik (BPS) mencatat pertumbuhan ekonomi Indonesia pada kuartal pertama 2025 mencapai 5,11 persen secara tahunan. Kepala BPS menyatakan pertumbuhan ini didorong oleh konsumsi rumah tangga dan investasi.",
+  "Benarkah minum kopi hitam setiap hari bisa berbahaya untuk jantung? Beberapa penelitian menunjukkan konsumsi kopi moderat justru bermanfaat, namun para ahli masih berbeda pendapat mengenai batas aman konsumsinya."
+];
+
+const textarea = document.getElementById('newsInput');
+const analyzeBtn = document.getElementById('analyzeBtn');
+
+textarea.addEventListener('input', () => {
+  const l = textarea.value.length;
+  document.getElementById('charCount').textContent = l + ' karakter';
+  analyzeBtn.disabled = l < 30;
+});
+
+function fillEx(i) {
+  textarea.value = EXAMPLES[i];
+  document.getElementById('charCount').textContent = EXAMPLES[i].length + ' karakter';
+  analyzeBtn.disabled = false;
+}
+
+function resetForm() {
+  document.getElementById('resultWrap').classList.remove('active');
+  textarea.value = '';
+  document.getElementById('charCount').textContent = '0 karakter';
+  analyzeBtn.disabled = true;
+  textarea.focus();
+}
+
+/* ===== DATABASE POLA HOAKS ===== */
+const HOAKS_KEYWORDS = [
+  'chip mikro','microchip','disembunyikan','ditutupi','rahasiakan','konspirasi',
+  'illuminati','freemason','new world order','agenda tersembunyi','pemerintah sembunyikan',
+  'media tidak beritakan','mainstream media bohong','sebarkan sebelum dihapus',
+  'jangan percaya pemerintah','bangun','tersadar','mereka tidak mau kamu tahu',
+  'bukti nyata','fakta yang disembunyikan','pemerintah bohong','diam-diam',
+  'terbukti secara ilmiah oleh','para ilmuwan menemukan','ramuan ajaib',
+  'obat mujarab','sembuh dalam','menyembuhkan semua','anti kanker','anti covid',
+  'tolak vaksin','vaksin berbahaya','vaksin mematikan','efek samping tersembunyi',
+  '5g berbahaya','radiasi 5g','gelombang elektromagnetik berbahaya',
+  'bumi datar','flat earth','bumi tidak bulat','nasa bohong',
+  'nabi meramalkan','ramalan','kiamat','akhir zaman',
+  'nasi plastik','telur plastik','daging plastik','beras palsu',
+  'mie instan berbahaya','msg berbahaya','pengawet mematikan',
+  'air putih bisa sembuhkan','terapi urin','minyak bumi sebagai obat',
+  'dokter tidak mau tahu','dokter disuruh diam','perusahaan farmasi'
+];
+
+const SENSASI_KEYWORDS = [
+  'breaking','viral','wow','mengejutkan','luar biasa','fantastis','dahsyat',
+  'gila','geger','heboh','bikin geleng','tidak percaya','mustahil','ajaib',
+  'spektakuler','fenomenal','revolusioner','terkuak','akhirnya terbongkar',
+  'bongkar','terbukti','sudah terbukti','sudah terkonfirmasi','100 persen',
+  'pasti','dijamin','tidak ada yang tahu','hanya sedikit yang tahu',
+  'tersembunyi selama','sudah lama disembunyikan','rahasia terbesar',
+  'menggemparkan','menghebohkan','mencengangkan','mengerikan','menakutkan',
+  'wajib tahu','harus tahu','semua harus baca','share sebelum','sebar sebelum',
+  'sebelum dihapus','sebelum diblokir','sebelum ditutup','jangan lewatkan'
+];
+
+const URGENCY_KEYWORDS = [
+  'segera','secepatnya','jangan tunda','langsung','saat ini juga','detik ini',
+  'sekarang juga','malam ini','hari ini juga','jangan tunggu','berbahaya',
+  'evakuasi','lari','kabur','selamatkan','waspada','siaga','darurat',
+  'bencana','malapetaka','musibah','bahaya','mengancam','mematikan',
+  'segera hubungi','segera beritahu','sebar ke semua','forward ke semua',
+  'kirim ke semua kontak','tag semua teman','repost','share sekarang'
+];
+
+const CONSPIRACY_PHRASES = [
+  'mereka tidak mau','mereka sembunyikan','elite global','shadow government',
+  'one world government','agenda globalis','depopulasi','populasi berkurang',
+  'sengaja dibuat','direncanakan','by design','sudah diatur','sudah direncanakan',
+  'sistem rusak','sistem bobrok','koruptor','pengkhianat bangsa',
+  'asing menguasai','dijajah kembali','neo kolonialisme','zionisme',
+  'freemasonry','kristalisasi','kristenisasi','pemurtadan','misionaris',
+  'komunisme','pkiisme','asing aseng','cina menguasai'
+];
+
+const EMOTION_TRIGGERS = [
+  'bangkit','lawan','tolak','boikot','haram','dosa','azab','kutukan',
+  'murka tuhan','tanda kiamat','akhir zaman','laknat','kafir','murtad',
+  'pengkhianat','penghianat','penjilat','antek asing','budak',
+  'demi anak cucu','demi masa depan','demi bangsa','demi agama',
+  'terbangun','sadar','melek','jangan jadi domba','jangan terbodoh'
+];
+
+const VALID_INDICATORS = [
+  'menurut','berdasarkan','dilansir dari','dikutip dari','sumber resmi',
+  'juru bicara','kepala','direktur','menteri','presiden','gubernur',
+  'persen','ribu','juta','miliar','triliun',
+  'penelitian','studi','jurnal','laporan','data','statistik','survei',
+  'bps','bi','ojk','kemenkes','kemendikbud','bpom','bnpb',
+  'kompas','tempo','detik','republika','antara','liputan6',
+  'reuters','ap','afp','bbc','cnbc','bloomberg',
+  'dokter','profesor','ahli','pakar','peneliti','akademisi',
+  'uji klinis','peer review','evidence based','berbasis data'
+];
+
+/* ===== FUNGSI ANALISIS ===== */
+function countMatches(text, keywords) {
+  const t = text.toLowerCase();
+  return keywords.filter(k => t.includes(k.toLowerCase())).length;
+}
+
+function countCapsRatio(text) {
+  const letters = text.replace(/[^a-zA-Z]/g,'');
+  if(!letters.length) return 0;
+  const upper = text.replace(/[^A-Z]/g,'').length;
+  return upper / letters.length;
+}
+
+function countExclamation(text) {
+  return (text.match(/!/g)||[]).length;
+}
+
+function countQuestionOveruse(text) {
+  return (text.match(/\?{2,}/g)||[]).length;
+}
+
+function hasUnverifiableNumbers(text) {
+  return /\d+\s*(persen|%)\s*(terbukti|dijamin|pasti|sudah)/i.test(text) ||
+         /\d+\s*(juta|miliar)\s*(orang|pasien)\s*(sudah|telah)\s*(sembuh|meninggal)/i.test(text);
+}
+
+function hasSourcelessExpertClaim(text) {
+  const t = text.toLowerCase();
+  const expertWords = ['ilmuwan','dokter','pakar','ahli','peneliti','profesor'];
+  const hasExpert = expertWords.some(w => t.includes(w));
+  const hasSource = VALID_INDICATORS.filter(v => t.includes(v)).length > 2;
+  return hasExpert && !hasSource;
+}
+
+function hasFearTactics(text) {
+  const t = text.toLowerCase();
+  return URGENCY_KEYWORDS.filter(k => t.includes(k)).length >= 3;
+}
+
+function hasSharePressure(text) {
+  const t = text.toLowerCase();
+  const patterns = ['sebarkan','share','forward','kirim ke','tag','repost','bagikan'];
+  return patterns.filter(p => t.includes(p)).length >= 2;
+}
+
+function detectWordRepetition(text) {
+  const words = text.toLowerCase().split(/\s+/);
+  const freq = {};
+  words.forEach(w => { if(w.length > 4) freq[w] = (freq[w]||0)+1; });
+  return Object.values(freq).filter(v => v >= 4).length;
+}
+
+function analyze() {
+  const text = textarea.value.trim();
+  if(text.length < 30) return;
+
+  const t = text.toLowerCase();
+
+  /* === Hitung semua skor === */
+  const hoaksKw = countMatches(text, HOAKS_KEYWORDS);
+  const sensasiKw = countMatches(text, SENSASI_KEYWORDS);
+  const urgencyKw = countMatches(text, URGENCY_KEYWORDS);
+  const conspiracyKw = countMatches(text, CONSPIRACY_PHRASES);
+  const emotionKw = countMatches(text, EMOTION_TRIGGERS);
+  const validKw = countMatches(text, VALID_INDICATORS);
+  const capsRatio = countCapsRatio(text);
+  const exclamCount = countExclamation(text);
+  const noSource = hasSourcelessExpertClaim(text);
+  const unverNum = hasUnverifiableNumbers(text);
+  const fearTactic = hasFearTactics(text);
+  const sharePressure = hasSharePressure(text);
+  const wordRepeat = detectWordRepetition(text);
+  const textLen = text.split(/\s+/).length;
+
+  /* === Dimensi Skor (0-100) === */
+  // Bahasa (sensasionalisme linguistik)
+  const langScore = Math.min(100, Math.round(
+    (capsRatio * 60) + (Math.min(exclamCount, 10) * 4) + (sensasiKw * 5) + (wordRepeat * 5)
+  ));
+
+  // Konten Hoaks
+  const contentScore = Math.min(100, Math.round(
+    (hoaksKw * 10) + (conspiracyKw * 12) + (emotionKw * 6) + (unverNum ? 15 : 0) + (noSource ? 10 : 0)
+  ));
+
+  // Urgensi Manipulatif
+  const urgencyScore = Math.min(100, Math.round(
+    (urgencyKw * 6) + (sharePressure ? 25 : 0) + (fearTactic ? 20 : 0)
+  ));
+
+  // Skor Validitas Sumber
+  const sourceBonus = Math.min(60, validKw * 8);
+
+  /* === Skor Final (kepercayaan konten: 0=hoaks, 100=valid) === */
+  const rawHoaksScore = (langScore * 0.25) + (contentScore * 0.40) + (urgencyScore * 0.35);
+  const trustScore = Math.max(0, Math.min(100, Math.round(
+    100 - rawHoaksScore + sourceBonus
+  )));
+
+  /* === Klasifikasi === */
+  let verdict, vClass, vIcon, vDesc;
+  if(trustScore <= 35) {
+    verdict = 'HOAKS';
+    vClass = 'v-hoaks';
+    vIcon = '<i class="ti ti-x" aria-hidden="true"></i>';
+    vDesc = 'Konten ini memiliki banyak ciri hoaks: bahasa sensasional, klaim tanpa sumber, dan pola manipulasi emosi.';
+  } else if(trustScore <= 60) {
+    verdict = 'PERLU VERIFIKASI';
+    vClass = 'v-ragu';
+    vIcon = '<i class="ti ti-question-mark" aria-hidden="true"></i>';
+    vDesc = 'Konten ini memiliki beberapa indikator meragukan. Cek ke sumber resmi sebelum menyebarkan.';
+  } else {
+    verdict = 'TERINDIKASI VALID';
+    vClass = 'v-valid';
+    vIcon = '<i class="ti ti-check" aria-hidden="true"></i>';
+    vDesc = 'Konten ini tidak menunjukkan pola hoaks yang signifikan dan menggunakan bahasa yang lebih faktual.';
+  }
+
+  /* === Indikator 4 kotak === */
+  function levelOf(score, inv) {
+    if(inv) {
+      if(score >= 60) return ['🔴','TINGGI','#FF5C7A'];
+      if(score >= 25) return ['🟡','SEDANG','#FFB800'];
+      return ['🟢','RENDAH','#00E676'];
+    } else {
+      if(score >= 60) return ['🟢','BAIK','#00E676'];
+      if(score >= 30) return ['🟡','SEDANG','#FFB800'];
+      return ['🔴','LEMAH','#FF5C7A'];
+    }
+  }
+
+  const [iLangIco,iLangVal,iLangCol] = levelOf(langScore, true);
+  const [iSensIco,iSensVal,iSensCol] = levelOf(contentScore, true);
+  const [iClaimIco,iClaimVal,iClaimCol] = levelOf(urgencyScore, true);
+  const [iUrgIco,iUrgVal,iUrgCol] = levelOf(Math.min(100,sourceBonus*1.5+20), false);
+
+  document.getElementById('iLang').textContent = iLangIco;
+  document.getElementById('iLangV').textContent = iLangVal;
+  document.getElementById('iLangV').style.color = iLangCol;
+  document.getElementById('iSens').textContent = iSensIco;
+  document.getElementById('iSensV').textContent = iSensVal;
+  document.getElementById('iSensV').style.color = iSensCol;
+  document.getElementById('iClaim').textContent = iClaimIco;
+  document.getElementById('iClaimV').textContent = iClaimVal;
+  document.getElementById('iClaimV').style.color = iClaimCol;
+  document.getElementById('iUrgent').textContent = iUrgIco;
+  document.getElementById('iUrgentV').textContent = iUrgVal;
+  document.getElementById('iUrgentV').style.color = iUrgCol;
+
+  /* === Verdict === */
+  const badge = document.getElementById('verdictBadge');
+  badge.className = 'verdict-badge ' + vClass;
+  badge.innerHTML = vIcon + ' ' + verdict;
+  document.getElementById('verdictDesc').textContent = vDesc;
+
+  /* === Meter === */
+  const fill = document.getElementById('barFill');
+  fill.className = 'bar-fill ' + (trustScore <= 35 ? 'fill-d' : trustScore <= 60 ? 'fill-w' : 'fill-s');
+  setTimeout(() => { fill.style.width = trustScore + '%'; }, 80);
+  document.getElementById('scoreLabel').textContent = trustScore + '% Kepercayaan';
+  document.getElementById('scoreLabel').style.color = trustScore <= 35 ? '#FF5C7A' : trustScore <= 60 ? '#FFB800' : '#00E676';
+
+  /* === Detail Grid === */
+  const dims = [
+    { label: 'Sensasionalisme Bahasa', score: langScore, inv: true },
+    { label: 'Konten Bermasalah', score: contentScore, inv: true },
+    { label: 'Manipulasi Urgensi', score: urgencyScore, inv: true },
+    { label: 'Kredibilitas Sumber', score: Math.min(100, sourceBonus * 1.7), inv: false }
+  ];
+  const dg = document.getElementById('detailGrid');
+  dg.innerHTML = '';
+  dims.forEach(d => {
+    const col = d.inv
+      ? (d.score >= 60 ? '#FF5C7A' : d.score >= 25 ? '#FFB800' : '#00E676')
+      : (d.score >= 60 ? '#00E676' : d.score >= 30 ? '#FFB800' : '#FF5C7A');
+    const fillPct = d.score;
+    dg.innerHTML += `<div class="detail-box">
+      <div class="det-label">${d.label}</div>
+      <div class="det-bar-track"><div class="det-bar-fill" style="width:0%;background:${col};transition:width 1.3s ease" data-w="${fillPct}"></div></div>
+      <div class="det-score" style="color:${col}">${d.score}<span style="font-size:12px;font-weight:400;color:#3A4A6A">%</span></div>
+    </div>`;
+  });
+  setTimeout(() => {
+    document.querySelectorAll('.det-bar-fill').forEach(el => {
+      el.style.width = el.dataset.w + '%';
+    });
+  }, 100);
+
+  /* === Flags === */
+  const flags = [];
+  const dotC = trustScore <= 35 ? 'dd' : trustScore <= 60 ? 'dw' : 'ds';
+
+  if(capsRatio > 0.25) flags.push({ text: `Penggunaan huruf kapital berlebihan (${Math.round(capsRatio*100)}% dari teks)`, c: 'dd' });
+  if(exclamCount >= 3) flags.push({ text: `Tanda seru berlebihan (${exclamCount} kali) — taktik manipulasi emosi`, c: 'dd' });
+  if(hoaksKw > 0) flags.push({ text: `Ditemukan ${hoaksKw} kata/frasa terkait pola hoaks umum`, c: 'dd' });
+  if(conspiracyKw > 0) flags.push({ text: `Mengandung ${conspiracyKw} indikator narasi konspirasi`, c: 'dd' });
+  if(sharePressure) flags.push({ text: 'Terdapat tekanan untuk segera menyebarkan konten (taktik viral palsu)', c: 'dd' });
+  if(fearTactic) flags.push({ text: 'Menggunakan taktik ketakutan dan kepanikan untuk mempengaruhi pembaca', c: 'dd' });
+  if(unverNum) flags.push({ text: 'Angka statistik tidak terverifikasi atau digunakan secara menyesatkan', c: 'dw' });
+  if(noSource) flags.push({ text: 'Klaim pakar/ilmuwan tanpa menyebut nama, institusi, atau sumber jelas', c: 'dw' });
+  if(urgencyKw >= 3) flags.push({ text: `Kata urgensi berlebihan (${urgencyKw} kata) — mendorong tindakan impulsif`, c: 'dw' });
+  if(sensasiKw >= 2) flags.push({ text: `${sensasiKw} kata sensasional ditemukan — mengutamakan emosi atas fakta`, c: 'dw' });
+  if(emotionKw >= 2) flags.push({ text: `${emotionKw} pemicu emosional/agama/politik ditemukan`, c: 'dw' });
+  if(validKw >= 3) flags.push({ text: `Menggunakan ${validKw} referensi/sumber yang kredibel dan terverifikasi`, c: 'ds' });
+  if(validKw >= 1 && validKw < 3) flags.push({ text: 'Terdapat beberapa kata kunci yang menunjukkan sumber atau data', c: 'di' });
+  if(textLen > 80 && validKw === 0) flags.push({ text: 'Teks panjang namun tidak menyebut sumber data atau referensi apapun', c: 'dw' });
+  if(flags.length === 0) flags.push({ text: 'Tidak ada indikator hoaks yang kuat ditemukan dalam teks ini', c: 'ds' });
+
+  const fl = document.getElementById('flagsList');
+  fl.innerHTML = '';
+  flags.forEach(f => {
+    fl.innerHTML += `<li class="flag-item"><span class="fdot ${f.c}"></span><span>${f.text}</span></li>`;
+  });
+
+  /* === Summary === */
+  let summary = '';
+  if(verdict === 'HOAKS') {
+    summary = `Teks ini menunjukkan ${flags.filter(f=>f.c==='dd').length} indikator kuat hoaks. `;
+    if(capsRatio > 0.25) summary += 'Penggunaan huruf kapital masif adalah ciri khas konten hoaks yang mencoba menarik perhatian. ';
+    if(conspiracyKw > 0) summary += 'Narasi konspirasi yang menyebut "pihak yang menyembunyikan" tanpa bukti adalah pola hoaks klasik. ';
+    if(sharePressure) summary += 'Tekanan untuk segera menyebarkan sebelum "dihapus" adalah manipulasi sosial yang umum digunakan penyebar hoaks.';
+  } else if(verdict === 'PERLU VERIFIKASI') {
+    summary = `Teks ini memiliki beberapa elemen yang perlu dicermati. `;
+    if(sensasiKw > 0) summary += 'Bahasa yang digunakan cukup emosional namun belum tentu sepenuhnya salah. ';
+    if(noSource) summary += 'Klaim yang dibuat perlu dicek ke sumber primer yang kredibel. ';
+    summary += 'Sebaiknya verifikasi ke situs berita terpercaya atau lembaga resmi sebelum menyebarkan.';
+  } else {
+    summary = `Teks ini tidak menunjukkan pola hoaks yang signifikan. `;
+    if(validKw >= 3) summary += `Terdapat ${validKw} referensi kredibel yang menunjukkan konten berbasis data atau fakta. `;
+    summary += 'Meski demikian, selalu disarankan untuk membaca dari sumber aslinya untuk memastikan akurasi penuh.';
+  }
+  document.getElementById('summaryText').textContent = summary;
+
+  /* === Rekomendasi === */
+  const recs = {
+    'HOAKS': 'Jangan sebarkan konten ini. Cek kebenaran klaim melalui Turnbackhoax.id, Kominfo.go.id, atau situs berita nasional terpercaya seperti Kompas, Tempo, dan Antara. Beritahu pengirim bahwa konten ini terindikasi hoaks.',
+    'PERLU VERIFIKASI': 'Sebelum menyebarkan, verifikasi melalui minimal 2-3 sumber berita resmi. Cari informasi dari lembaga resmi terkait (Kemenkes, BNPB, dll). Hindari menyebarkan jika belum yakin kebenarannya.',
+    'TERINDIKASI VALID': 'Konten ini relatif aman disebarkan, namun tetap baca dari sumber aslinya untuk konteks lengkap. Pastikan tidak menyebarkan potongan berita yang bisa menyesatkan jika diambil dari konteks yang salah.'
+  };
+  document.getElementById('recommendText').textContent = recs[verdict];
+
+  /* === Tampilkan hasil === */
+  const rc = document.getElementById('resultCard');
+  rc.style.border = `1px solid ${trustScore<=35 ? 'rgba(255,59,92,0.3)' : trustScore<=60 ? 'rgba(255,184,0,0.25)' : 'rgba(0,230,118,0.2)'}`;
+  document.getElementById('resultWrap').classList.add('active');
+  document.getElementById('resultWrap').scrollIntoView({ behavior:'smooth', block:'nearest' });
+}
+</script>
